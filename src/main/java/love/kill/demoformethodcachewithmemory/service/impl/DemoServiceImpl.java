@@ -13,23 +13,22 @@ import org.springframework.stereotype.Service;
 public class DemoServiceImpl implements DemoService {
 
 	@Override
-	public String getDataWithoutMethodCache() {
-		return doGetData();
+	public String getDataWithoutMethodCache(String key) {
+		return doGetData(key);
 	}
 
-	@CacheData
 	@Override
-	public String getDataWithMethodCache() {
-		return doGetData();
+	public String getDataWithMethodCache(String key) {
+		return doGetData(key);
 	}
 
-	private String doGetData(){
+	private String doGetData(String key){
 		try {
 			// 模拟耗时的业务处理
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		return "hello world!";
+		return "hello world! key=" + key;
 	}
 }
