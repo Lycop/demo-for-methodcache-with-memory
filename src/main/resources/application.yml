@@ -6,4 +6,14 @@ methodcache:
   # 启用。true：开启，false：关闭，默认false
   enable: true
   # 输出日志(info级别)，true：开启，false：关闭，默认false
-  enable-log: true
+  enable-log: false
+  # 端点信息，默认关闭
+  enable-endpoint: true
+  # 统计，默认关闭
+  enable-statistics: true
+  # 内存监控，默认开启（仅内存缓存方式生效）
+  enable-memory-monitor: true
+  # 内存告警阈值，百分比，取值范围：(0, 100)，默认：50（仅内存缓存方式生效）
+  memory-threshold: 50
+  # GC阈值，百分比，取值范围：(0, 100)，默认：50（仅内存缓存方式生效）
+  gc-threshold: 50

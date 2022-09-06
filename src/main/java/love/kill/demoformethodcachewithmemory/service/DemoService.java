@@ -1,20 +1,35 @@
 package love.kill.demoformethodcachewithmemory.service;
 
+import love.kill.demoformethodcachewithmemory.domain.DemoDTO;
 import love.kill.methodcache.annotation.CacheData;
-import love.kill.methodcache.annotation.CapitalExpiration;
-import org.springframework.stereotype.Service;
 
 /**
  *
  *
  * @author Lycop
  */
-@Service
 public interface DemoService {
 
-	String getDataWithoutMethodCache(String key);
+	/**
+	 * 无缓存请求
+	 * */
+	DemoDTO getWithoutCache(DemoDTO demoDTO);
 
-	@CacheData(refresh = false,behindExpiration = 10000L, capitalExpiration = CapitalExpiration.DAY, id="getDataWithMethodCache")
-	String getDataWithMethodCache(String key);
+	/**
+	 * 带缓存的请求1
+	 * */
+	@CacheData(id = "getWithCache1", refresh = false, remark = "从缓存获取数据例子_1")
+	DemoDTO getWithCache1(DemoDTO demoDTO);
 
+	/**
+	 * 带缓存的请求2
+	 * */
+	@CacheData(id = "getWithCache2", refresh = false, remark = "从缓存获取数据例子_2")
+	DemoDTO getWithCache2(DemoDTO demoDTO);
+
+	/**
+	 * 带缓存的请求3
+	 * */
+	@CacheData(id = "getWithCache3", refresh = false, remark = "从缓存获取数据例子_3")
+	int getWithCache3(DemoDTO demoDTO);
 }
