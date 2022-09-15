@@ -2,6 +2,7 @@ package love.kill.demoformethodcachewithmemory.service;
 
 import love.kill.demoformethodcachewithmemory.domain.DemoDTO;
 import love.kill.methodcache.annotation.CacheData;
+import love.kill.methodcache.annotation.DeleteData;
 
 /**
  *
@@ -18,18 +19,31 @@ public interface DemoService {
 	/**
 	 * 带缓存的请求1
 	 * */
-	@CacheData(id = "getWithCache1", refresh = false, remark = "从缓存获取数据例子_1")
+	@CacheData(id = "getWithCache1", expiration = 60 * 60 * 1000L, remark = "从缓存获取数据例子_1")
 	DemoDTO getWithCache1(DemoDTO demoDTO);
 
 	/**
 	 * 带缓存的请求2
 	 * */
-	@CacheData(id = "getWithCache2", refresh = false, remark = "从缓存获取数据例子_2")
+	@CacheData(id = "getWithCache2", expiration = 60 * 60 * 1000L, remark = "从缓存获取数据例子_2")
 	DemoDTO getWithCache2(DemoDTO demoDTO);
 
 	/**
 	 * 带缓存的请求3
 	 * */
-	@CacheData(id = "getWithCache3", refresh = false, remark = "从缓存获取数据例子_3")
+	@CacheData(id = "getWithCache3", expiration = 60 * 60 * 1000L, remark = "从缓存获取数据例子_3")
 	int getWithCache3(DemoDTO demoDTO);
+
+	/**
+	 * 非缓存方式获取数据并删除缓存
+	 * */
+	@DeleteData(id = {"getWithCache1","getWithCache2"})
+	DemoDTO getdelWithoutCache(DemoDTO demoDTO);
+
+	/**
+	 * 缓存方式获取数据并删除缓存
+	 * */
+	@CacheData(id = "getdelWithCache", expiration = 60 * 60 * 1000L, remark = "缓存方式获取数据并删除缓存")
+	@DeleteData(id = {"getWithCache2","getWithCache3"})
+	DemoDTO getdelWithCache(DemoDTO demoDTO);
 }

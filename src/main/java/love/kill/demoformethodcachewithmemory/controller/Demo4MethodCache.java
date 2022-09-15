@@ -3,7 +3,6 @@ package love.kill.demoformethodcachewithmemory.controller;
 import love.kill.demoformethodcachewithmemory.domain.DemoDTO;
 import love.kill.demoformethodcachewithmemory.service.DemoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,7 +15,6 @@ import java.util.Date;
  *
  * @author Lycop
  */
-@EnableTransactionManagement
 @RestController
 @RequestMapping("/demo")
 public class Demo4MethodCache {
@@ -25,7 +23,7 @@ public class Demo4MethodCache {
 	private DemoService demoService;
 
 	/**
-	 * 普通方式(1000毫秒)
+	 * 非缓存获取数据(1000毫秒)
 	 */
 	@GetMapping("/withoutmethodcache")
 	public String withoutMethodCache(@RequestParam(value = "key", required = false) String key, @RequestParam(value = "val", required = false) String val) {
@@ -74,5 +72,34 @@ public class Demo4MethodCache {
 		demoDTO.setKey(key);
 		demoDTO.setVal(val);
 		return demoService.getWithCache3(demoDTO) + "(耗时：" + (new Date().getTime() - start + "毫秒)");
+	}
+
+	/**
+	 * 非缓存方式获取数据并删除缓存
+	 * 获取成功后删除"缓存方式1"和"缓存方式2"对应的缓存
+	 */
+	@GetMapping("/getdelwithoutcache")
+	public String getdelWithoutCache(@RequestParam(value = "key", required = false) String key, @RequestParam(value = "val", required = false) String val) {
+		long start = new Date().getTime();
+
+		DemoDTO demoDTO = new DemoDTO();
+		demoDTO.setKey(key);
+		demoDTO.setVal(val);
+		return demoService.getdelWithoutCache(demoDTO).getResponse() + "（耗时：" + (new Date().getTime() - start + "毫秒）");
+	}
+
+
+	/**
+	 * 缓存方式获取并删除缓存
+	 * 获取成功后删除"缓存方式2"和"缓存方式3"对应的缓存
+	 */
+	@GetMapping("/getdelwithcache")
+	public String getdelwithcache(@RequestParam(value = "key", required = false) String key, @RequestParam(value = "val", required = false) String val) {
+		long start = new Date().getTime();
+
+		DemoDTO demoDTO = new DemoDTO();
+		demoDTO.setKey(key);
+		demoDTO.setVal(val);
+		return demoService.getdelWithCache(demoDTO).getResponse() + "（耗时：" + (new Date().getTime() - start + "毫秒）");
 	}
 }

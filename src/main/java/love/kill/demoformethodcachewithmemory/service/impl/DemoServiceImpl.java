@@ -33,6 +33,16 @@ public class DemoServiceImpl implements DemoService {
 		return resultDTO.getKey().hashCode() + resultDTO.getVal().hashCode();
 	}
 
+	@Override
+	public DemoDTO getdelWithoutCache(DemoDTO demoDTO) {
+		return doGetData(demoDTO, 1000);
+	}
+
+	@Override
+	public DemoDTO getdelWithCache(DemoDTO demoDTO) {
+		return doGetData(demoDTO, 1000);
+	}
+
 	/**
 	 * 业务请求
 	 */
