@@ -2,6 +2,8 @@ package love.kill.demoformethodcachewithmemory.controller;
 
 import love.kill.demoformethodcachewithmemory.domain.DemoDTO;
 import love.kill.demoformethodcachewithmemory.service.DemoService;
+import love.kill.demoformethodcachewithmemory.service.IsolationStrategyService;
+import love.kill.methodcache.annotation.CacheIsolation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +23,9 @@ public class Demo4MethodCache {
 
 	@Autowired
 	private DemoService demoService;
+
+	@Autowired
+	private IsolationStrategyService isolationStrategyService;
 
 	/**
 	 * 非缓存获取数据(1000毫秒)
@@ -101,5 +106,40 @@ public class Demo4MethodCache {
 		demoDTO.setKey(key);
 		demoDTO.setVal(val);
 		return demoService.getdelWithCache(demoDTO).getResponse() + "（耗时：" + (new Date().getTime() - start + "毫秒）");
+	}
+
+	/**
+	 * 无缓存循环调用
+	 */
+	@GetMapping("/loopwithoutcache")
+	public String loopwithoutcache(@RequestParam(value = "key", required = false) String key, @RequestParam(value = "val", required = false) String val) {
+		long start = new Date().getTime();
+
+		DemoDTO demoDTO = new DemoDTO();
+		demoDTO.setKey(key);
+		demoDTO.setVal(val);
+		return isolationStrategyService.loopWithoutCache(demoDTO) + "(耗时：" + (new Date().getTime() - start + "毫秒)");
+	}
+
+	/**
+	 * 带缓存循环调用
+	 *
+	 * 演示：
+	 *   1）使用了和"getWithMethodCache1()"一样参数的请求；
+	 *   2）请求"http://127.0.0.1:8080/demo/withmethodcache_1?key=1&val=2"，触发缓存;
+	 * 	 3）缓存失效前，迅速请求"http://127.0.0.1:8080/demo/loopwithcache?key=1&val=2"。
+	 *
+	 * 如果未开启@CacheIsolation(isolationStrategy = 'T')，缓存隔离不生效，共享"/demo/withmethodcache_1"的缓存；
+	 * 如果开启线程隔离@CacheIsolation(isolationStrategy = 'T')，缓存隔离生效，首次请求会发起实际请求；
+	 */
+	@CacheIsolation(isolationStrategy = 'T')
+	@GetMapping("/loopwithcache")
+	public String isolationStrategy(@RequestParam(value = "key", required = false) String key, @RequestParam(value = "val", required = false) String val) {
+		long start = new Date().getTime();
+
+		DemoDTO demoDTO = new DemoDTO();
+		demoDTO.setKey(key);
+		demoDTO.setVal(val);
+		return isolationStrategyService.loopWithCache(demoDTO) + "(耗时：" + (new Date().getTime() - start + "毫秒)");
 	}
 }

@@ -2,6 +2,7 @@ package love.kill.demoformethodcachewithmemory.service.impl;
 
 import love.kill.demoformethodcachewithmemory.domain.DemoDTO;
 import love.kill.demoformethodcachewithmemory.service.DemoService;
+import love.kill.methodcache.annotation.CacheData;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,6 +23,7 @@ public class DemoServiceImpl implements DemoService {
 		return doGetData(demoDTO, 1000);
 	}
 
+	@CacheData(id = "getWithCache2", expiration = 60 * 60 * 1000L, remark = "从缓存获取数据例子_2")
 	@Override
 	public DemoDTO getWithCache2(DemoDTO demoDTO) {
 		return doGetData(demoDTO, 500);
@@ -53,8 +55,11 @@ public class DemoServiceImpl implements DemoService {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		demoDTO.setResponse("hello world! key=" + demoDTO.getKey() + ", val=" + demoDTO.getVal());
-		return demoDTO;
+		DemoDTO result = new DemoDTO();
+		result.setKey(demoDTO.getKey());
+		result.setVal(demoDTO.getVal());
+		result.setResponse("hello world! key=" + demoDTO.getKey() + ", val=" + demoDTO.getVal());
+		return result;
 	}
 
 }

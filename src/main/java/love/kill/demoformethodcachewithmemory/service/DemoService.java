@@ -25,7 +25,6 @@ public interface DemoService {
 	/**
 	 * 带缓存的请求2
 	 * */
-	@CacheData(id = "getWithCache2", expiration = 60 * 60 * 1000L, remark = "从缓存获取数据例子_2")
 	DemoDTO getWithCache2(DemoDTO demoDTO);
 
 	/**
