@@ -17,9 +17,9 @@ public interface DemoService {
 	DemoDTO getWithoutCache(DemoDTO demoDTO);
 
 	/**
-	 * 带缓存的请求1
+	 * 带缓存的请求1，共享式缓存数据
 	 * */
-	@CacheData(id = "getWithCache1", expiration = 60 * 60 * 1000L, remark = "从缓存获取数据例子_1")
+	@CacheData(id = "getWithCache1", expiration = 60 * 60 * 1000L, shared = true, remark = "从缓存获取数据例子_1")
 	DemoDTO getWithCache1(DemoDTO demoDTO);
 
 	/**
