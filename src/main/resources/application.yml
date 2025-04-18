@@ -3,17 +3,28 @@ server:
 
 # 方法缓存
 methodcache:
+  # 缓存名称，若不设置则取 ${spring.application.name}
+  name: demo-for-methodcache-with-memory
+  # 分组名
+  groupName: demo-groupname-for-methodcache
   # 启用。true：开启，false：关闭，默认false
   enable: true
-  # 输出日志(info级别)，true：开启，false：关闭，默认false
+  # 输出日志(info级别)。true：开启，false：关闭，默认false
   enable-log: true
+  # 缓存方式。(M)emory：内存，(R)edis：redis，默认M
+  cache-type: M
+  # Redis 配置(缓存方式 cache-type 为 R 时生效)
+  redis:
+    database: 1
+    host: 127.0.0.1
+    port: 6379
+    password: 888888
   # 端点信息，默认关闭
   enable-endpoint: true
-  # 统计，默认关闭
+  # 统计
   enable-statistics: true
-  # 内存监控，默认开启（仅内存缓存方式生效）
-  enable-memory-monitor: true
-  # 内存告警阈值，百分比，取值范围：(0, 100)，默认：50（仅内存缓存方式生效）
-  memory-threshold: 50
-  # GC阈值，百分比，取值范围：(0, 100)，默认：50（仅内存缓存方式生效）
-  gc-threshold: 50
+  # 请求快照
+  snapshot:
+    enable: true
+    # 快照级别：EXCEPTION(异常，默认)、ASSERT(断言)、ALL(全部)
+    level: ALL

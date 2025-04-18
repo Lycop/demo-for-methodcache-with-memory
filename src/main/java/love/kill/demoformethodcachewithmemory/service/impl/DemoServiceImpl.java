@@ -1,6 +1,7 @@
 package love.kill.demoformethodcachewithmemory.service.impl;
 
 import love.kill.demoformethodcachewithmemory.domain.DemoDTO;
+import love.kill.demoformethodcachewithmemory.domain.ResponseDTO;
 import love.kill.demoformethodcachewithmemory.service.DemoService;
 import love.kill.methodcache.annotation.CacheData;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,28 @@ public class DemoServiceImpl implements DemoService {
 	@Override
 	public DemoDTO getdelWithCache(DemoDTO demoDTO) {
 		return doGetData(demoDTO, 1000);
+	}
+
+
+	@Override
+	public ResponseDTO demo4AssertResult(int dividend) {
+
+		ResponseDTO resultDTO = new ResponseDTO();
+		try {
+			String result = String.valueOf(1 / dividend);
+			resultDTO.setCode(0);
+			resultDTO.setMessage("计算成功，结果为：" + result);
+			return resultDTO;
+		}catch (Exception e){
+			resultDTO.setCode(-1);
+			resultDTO.setMessage("计算时发生异常：" + e.getMessage());
+			return resultDTO;
+		}
+	}
+
+	@Override
+	public Integer demo4AssertCacheData(int dividend) {
+		return 10 - dividend;
 	}
 
 	/**

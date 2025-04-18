@@ -1,6 +1,7 @@
 package love.kill.demoformethodcachewithmemory.controller;
 
 import love.kill.demoformethodcachewithmemory.domain.DemoDTO;
+import love.kill.demoformethodcachewithmemory.domain.ResponseDTO;
 import love.kill.demoformethodcachewithmemory.service.DemoService;
 import love.kill.demoformethodcachewithmemory.service.IsolationStrategyService;
 import love.kill.methodcache.annotation.CacheIsolation;
@@ -141,5 +142,30 @@ public class Demo4MethodCache {
 		demoDTO.setKey(key);
 		demoDTO.setVal(val);
 		return isolationStrategyService.loopWithCache(demoDTO) + "(耗时：" + (new Date().getTime() - start + "毫秒)");
+	}
+
+
+	/**
+	 * 断言结果
+	 *
+	 * 传被除数dividend，返回"1/dividend"的计算结果：
+	 *     1）当dividend!=0时，程序执行正常；
+	 *     2）当dividend=0时，程序正常异常。
+	 */
+	@GetMapping("/assertresult")
+	public ResponseDTO assertResult(@RequestParam(value = "dividend") int dividend) {
+		return demoService.demo4AssertResult(dividend);
+	}
+
+	/**
+	 * 断言缓存数据
+	 *
+	 * 传入一个被减数minuend，返回"10-minuend"的计算结果：
+	 *     1）无论minuend传入什么值，都会进行计算并缓存；
+	 *     2）断言：当缓存的值小于0时，不认可该结果，触发一次"实际请求"，并返回结果。
+	 */
+	@GetMapping("/assertcachedata")
+	public Integer assertCacheData(@RequestParam(value = "minuend") int minuend) {
+		return demoService.demo4AssertCacheData(minuend);
 	}
 }
